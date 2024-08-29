@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # Third-party
     "django_seed",
+    "rest_framework",
     # Local
     "articles",
 ]
