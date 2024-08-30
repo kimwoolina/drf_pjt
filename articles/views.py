@@ -23,11 +23,12 @@ def article_list(request):
     
     # 생성
     elif request.method == "POST":
-        data = request.data
-        title = data.get("title")
-        content = data.get("content")
-        article = Article.objects.create(title = title, content = content)
-        return Response({})
+        serializer = ArticleSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            # 상태코드는 회사에서 협의한 것으로 (200 or 201)
+            return Response(serializer.data, status=201)
+        return Response(serializer.errors, status=400)
         
 
 @api_view(["GET"])
