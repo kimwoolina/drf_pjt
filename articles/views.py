@@ -30,8 +30,23 @@ def article_list(request):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         
 
-@api_view(["GET"])
+@api_view(["GET", "PUT", "DELETE"])
 def article_detail(request, pk):
-    article = get_object_or_404(Article, id=pk)
-    serializers = ArticleSerializer(article)
-    return Response(serializers.data)
+    if request.method == "GET":
+        article = get_object_or_404(Article, id=pk)
+        serializers = ArticleSerializer(article)
+        return Response(serializers.data)
+
+    elif request.method == "PUT":
+        article = get_object_or_404(Article, pk=pk)
+        # partial: 일부 필드만 수정 가능하게
+        serializer = ArticleSerializer(article, data=request.data, partial= True)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            return Response(serializer.data)
+        
+    
+    elif request.method == "DELETE":
+        article = get_object_or_404(Article, pk=pk)
+        article.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
