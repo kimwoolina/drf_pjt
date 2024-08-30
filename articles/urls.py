@@ -1,12 +1,10 @@
 from django.urls import path
 from . import views
 
-
+#사실 API를 작성할때는 app_name이나, name을 잘 쓰지 않는 편, 겹칠 일이 잘 없기 때문에..
 app_name = "articles"
 
 urlpatterns = [
-    path("html/", views.article_list_html, name="article_list_html"),
-    path("json-01/", views.json_01, name="json_01"),
-    path("json-02/", views.json_02, name="json_02"),
-    path("json-drf/", views.json_drf, name="json-drf"),
+    path("", views.article_list, name="article_list"),
+    path("<int:pk>/", views.article_detail, name ="article_detail")
 ]

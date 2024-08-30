@@ -6,7 +6,7 @@ from django.urls.conf import include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("articles/", include("articles.urls")),
+    path("api/v1/articles/", include("articles.urls")), # api/api_version/..
 ]
 
 
