@@ -2,11 +2,11 @@ from django.shortcuts import render
 from .models import Article
 from django.http import JsonResponse, HttpResponse
 from django.core import serializers
+from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .serializers import ArticleSerializer #내가만든 Serializer
 from django.shortcuts import get_object_or_404
-
 
 
 # drf의 함수로 만드는 뷰는 반드시 api 데코레이터(Wrapping method - 함수 실행 전, 후에 실행해준다.) 필요
@@ -24,11 +24,10 @@ def article_list(request):
     # 생성
     elif request.method == "POST":
         serializer = ArticleSerializer(data=request.data)
-        if serializer.is_valid():
+        if serializer.is_valid(raise_exception=True):
             serializer.save()
             # 상태코드는 회사에서 협의한 것으로 (200 or 201)
-            return Response(serializer.data, status=201)
-        return Response(serializer.errors, status=400)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
         
 
 @api_view(["GET"])
