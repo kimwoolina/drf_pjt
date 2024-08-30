@@ -77,13 +77,17 @@ class ArticleListAPIView(APIView):
         
         
 class ArticleDetailAPIView(APIView):
+    # 2번이상 반복되는 부분은 함수로 따로 빼주는 것이 좋다.
+    def get_object(self, pk):
+        return get_object_or_404(Article, pk=pk)
+    
     def get(self, requesst, pk):
-        article = get_object_or_404(Article, id=pk)
+        article = self.get_object(pk)
         serializers = ArticleSerializer(article)
         return Response(serializers.data)
 
     def put(self, requesst, pk):
-        article = get_object_or_404(Article, pk=pk)
+        article = self.get_object(pk)
         # partial: 일부 필드만 수정 가능하게
         serializer = ArticleSerializer(article, data=request.data, partial= True)
         if serializer.is_valid(raise_exception=True):
@@ -91,6 +95,6 @@ class ArticleDetailAPIView(APIView):
             return Response(serializer.data)
     
     def delete(self, requesst, pk):
-        article = get_object_or_404(Article, pk=pk)
+        article = self.get_object(pk)
         article.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
