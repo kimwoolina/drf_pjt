@@ -1,12 +1,12 @@
 from django.shortcuts import render
-from .models import Article
+from .models import Article, Comment
 from django.http import JsonResponse, HttpResponse
 from django.core import serializers
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .serializers import ArticleSerializer #내가만든 Serializer
+from .serializers import ArticleSerializer , CommentSerializer#내가만든 Serializer
 from django.shortcuts import get_object_or_404
 
 
@@ -77,6 +77,7 @@ class ArticleListAPIView(APIView):
         
         
 class ArticleDetailAPIView(APIView):
+    
     # 2번이상 반복되는 부분은 함수로 따로 빼주는 것이 좋다.
     def get_object(self, pk):
         return get_object_or_404(Article, pk=pk)
@@ -86,7 +87,7 @@ class ArticleDetailAPIView(APIView):
         serializers = ArticleSerializer(article)
         return Response(serializers.data)
 
-    def put(self, requesst, pk):
+    def put(self, request, pk):
         article = self.get_object(pk)
         # partial: 일부 필드만 수정 가능하게
         serializer = ArticleSerializer(article, data=request.data, partial= True)
@@ -98,3 +99,39 @@ class ArticleDetailAPIView(APIView):
         article = self.get_object(pk)
         article.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+    
+
+class CommentListAPIView(APIView):
+    def get(self, request, article_pk):
+        article = get_object_or_404(Article, pk=article_pk)
+        comments = article.comments.all()
+        serializer = CommentSerializer(comments, many=True)
+        return Response(serializer.data)
+    
+    def post(self, request, article_pk):
+        article = get_object_or_404(Article, pk=article_pk)
+        serializer = CommentSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save(article=article)
+            #이 부분은 커스텀 가능(Response 안에 값 안써줘도됨)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)    
+        
+        
+class CommentDetailAPIView(APIView):
+    
+    def get_object(self, comment_pk):
+        return get_object_or_404(Comment, pk=comment_pk)
+    
+    def delete(self, request, comment_pk):
+        comment = self.get_object(comment_pk)
+        comment.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    
+    def put(self, request, comment_pk):
+        comment = self.get_object(comment_pk)
+        #comment는 필드가 content하나이므로 partial 굳이 안써줘도됨
+        serializer = CommentSerializer(comment, data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            return Response(serializer.data)
+        
