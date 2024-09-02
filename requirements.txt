@@ -1,14 +1,18 @@
 asgiref==3.8.1
 asttokens==2.4.1
+certifi==2024.7.4
+charset-normalizer==3.3.2
 colorama==0.4.6
 decorator==5.1.1
 Django==4.2
 django-extensions==3.2.3
 django-seed==0.3.1
 djangorestframework==3.15.2
+djangorestframework-simplejwt==5.3.1
 exceptiongroup==1.2.0
 executing==2.0.1
 Faker==28.0.0
+idna==3.8
 ipython==8.23.0
 jedi==0.19.1
 matplotlib-inline==0.1.6
@@ -20,7 +24,9 @@ psycopg2-binary==2.9.9
 ptyprocess==0.7.0
 pure-eval==0.2.2
 Pygments==2.17.2
+PyJWT==2.9.0
 python-dateutil==2.9.0.post0
+requests==2.32.3
 setuptools==72.1.0
 six==1.16.0
 sqlparse==0.4.4
@@ -29,5 +35,6 @@ toposort==1.10
 traitlets==5.14.2
 typing_extensions==4.11.0
 tzdata==2024.1
+urllib3==2.2.2
 wcwidth==0.2.13
 wheel==0.43.0

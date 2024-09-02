@@ -2,6 +2,7 @@
 import json
 import os
 from django.core.exceptions import ImproperlyConfigured
+from datetime import timedelta
 
 from pathlib import Path
 
@@ -46,6 +47,7 @@ INSTALLED_APPS = [
     # Third-party
     "django_seed",
     "rest_framework",
+    "rest_framework_simplejwt.token_blacklist",
     # Local
     "articles",
     "accounts",
@@ -96,6 +98,7 @@ DATABASES = {
 AUTH_USER_MODEL = "accounts.User"
 
 
+
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
@@ -114,6 +117,19 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ],
+}
+
+SIMPLE_JWT = {
+    # jwt 토큰 만료 시간 (30분)
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+    "ROTATE_REFRESH_TOKENS": True,
+    "BLACKLIST_AFTER_ROTATION": True,
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
