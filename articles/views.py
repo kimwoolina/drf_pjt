@@ -118,11 +118,11 @@ def check_sql(request):
     # 테스트용이라 나중에 지우기 귀찮으므로 함수 안쪽에서 임포트함
     from django.db import connection
     
-   
-    articles = Article.objects.all() # 쿼리 아직 실행 안됨
-    for article in articles: # 이때 실제로 사용되므로 이때 1번째 쿼리 실행됨
-        comments = article.comments.all() # comments아직 실행 안되었으므로 추가쿼리 실행 안됨
-        for comment in comments: # 이때 추가쿼리 N번 실행됨
+    # Article에는 Comment에 대한 정보가 없음!! -> 역참조임 -> prefetch_related 사용 (정참조일때도 사용가능은 함)
+    articles = Article.objects.all().prefetch_related("comments")
+    for article in articles: 
+        comments = article.comments.all() 
+        for comment in comments:
             print(comment.content)
         
     
