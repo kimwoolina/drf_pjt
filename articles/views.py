@@ -118,26 +118,13 @@ def check_sql(request):
     # 테스트용이라 나중에 지우기 귀찮으므로 함수 안쪽에서 임포트함
     from django.db import connection
     
-    
-    # comments = Comment.objects.all()
-    # # 여기까지는 comments가 실제로 사용이 되지 않았기 때문에 쿼리가 아직 실행되지 않음(장고의 지연로딩)
-    
-    # for comment in comments: # comments 조회 쿼리 실제로 발생
-    #     print(f"{comment.id}의 글제목") # comments에 대한 데이터 이미 있으므로 추가 쿼리 발생하지 않음
-    #     print(f"{comment.article.title}") # 추가쿼리 발생 / 우리가 가져왔던 데이터에는 article.title 정보가 없으므로. article테이블의 정보 출력
-    
-    # print("-" * 30)
-    # # 실행되었던 sql 쿼리를 볼 수 있다.
-    # print(connection.queries)
-    
-    
-    # 정참조이므로 select_related 사용
-    # comment 가져올때 article도 가져오라고 장고에게 알려주는 것!
-    comments = Comment.objects.all().select_related("article") 
-    
-    for comment in comments: # comments 조회 쿼리 실제로 발생
-        print(f"{comment.id}의 글제목") # comments에 대한 데이터 이미 있으므로 추가 쿼리 발생하지 않음
-        print(f"{comment.article.title}") # 추가쿼리 발생 / 우리가 가져왔던 데이터에는 article.title 정보가 없으므로. article테이블의 정보 출력
+   
+    articles = Article.objects.all() # 쿼리 아직 실행 안됨
+    for article in articles: # 이때 실제로 사용되므로 이때 1번째 쿼리 실행됨
+        comments = article.comments.all() # comments아직 실행 안되었으므로 추가쿼리 실행 안됨
+        for comment in comments: # 이때 추가쿼리 N번 실행됨
+            print(comment.content)
+        
     
     print("-" * 30)
     # 실행되었던 sql 쿼리를 볼 수 있다.
