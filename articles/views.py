@@ -113,6 +113,26 @@ class CommentDetailAPIView(APIView):
             return Response(serializer.data)
 
 
+@api_view(["GET"])
+def check_sql(request):
+    # 테스트용이라 나중에 지우기 귀찮으므로 함수 안쪽에서 임포트함
+    from django.db import connection
+    
+    
+    comments = Comment.objects.all()
+    # 여기까지는 comments가 실제로 사용이 되지 않았기 때문에 쿼리가 아직 실행되지 않음(장고의 지연로딩)
+    
+    for comment in comments: # comments 조회 쿼리 실제로 발생
+        print(f"{comment.id}의 글제목") # comments에 대한 데이터 이미 있으므로 추가 쿼리 발생하지 않음
+        print(f"{comment.article.title}") # 추가쿼리 발생 / 우리가 가져왔던 데이터에는 article.title 정보가 없으므로. article테이블의 정보 출력
+    
+    print("-" * 30)
+    # 실행되었던 sql 쿼리를 볼 수 있다.
+    print(connection.queries)
+    # -> 결과보면 엄청 많음.. -> 매우 비효율적임
+        
+    return Response()
+
 
 # drf의 함수로 만드는 뷰는 반드시 api 데코레이터(Wrapping method - 함수 실행 전, 후에 실행해준다.) 필요
 # @api_view() 안에 안넣어주면 GET,  # ["GET","POST"]
