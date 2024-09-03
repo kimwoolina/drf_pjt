@@ -118,7 +118,7 @@ def check_sql(request):
     
     # Article에는 Comment에 대한 정보가 없음!! -> 역참조임 -> prefetch_related 사용 (정참조일때도 사용가능은 함)
     articles = Article.objects.all().prefetch_related("comments")
-    for article in articles: 
+    for article in articles:
         comments = article.comments.all() 
         for comment in comments:
             print(comment.content)
