@@ -13,6 +13,7 @@ from .serializers import (
 )  # 내가만든 Serializer
 from django.shortcuts import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
+from drf_spectacular.utils import extend_schema
 
 # 함수형, 클래스형 중 뭐가 좋다, 나쁘다 말할 수는 없지만, CBV를 사용하면 우리가 작성하는 코드가 많이 줄어든다.
 # 많은 부분을 CBV에 위임하기 때문.
@@ -29,12 +30,25 @@ class ArticleListAPIView(APIView):
     # Get과 Post를 다른 메소드로 분기하여 처리가 가능
     # get, post 메소드만 존재하므로 그외의 요청이 들어오면 not Allowed 자동으로 return
 
+    # API 문서 커스터마이징.
+    # GET 메소드 위에 붙여줌!
+    @extend_schema(
+        tags=["Articles"],
+        description="Article 목록 조회를 위한 API",
+    )
     def get(self, request):
         print("\n현재 유저의 유저네임 : " , request.user.username, "\n")
         articles = Article.objects.all()
         serializers = ArticleSerializer(articles, many=True)
         return Response(serializers.data)
 
+    # API 문서 커스터마이징.
+    # POST 메소드 위에 붙여줌!
+    @extend_schema(
+        tags=["Articles"],
+        description="Article 생성을 위한 API",
+        request=ArticleSerializer,
+    )
     def post(self, request):
         serializer = ArticleSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):

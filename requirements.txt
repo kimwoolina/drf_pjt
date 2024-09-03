@@ -1,5 +1,6 @@
 asgiref==3.8.1
 asttokens==2.4.1
+attrs==24.2.0
 autopep8==2.3.1
 certifi==2024.7.4
 charset-normalizer==3.3.2
@@ -12,13 +13,17 @@ django-seed==0.3.1
 django-silk==5.2.0
 djangorestframework==3.15.2
 djangorestframework-simplejwt==5.3.1
+drf-spectacular==0.27.2
 exceptiongroup==1.2.0
 executing==2.0.1
 Faker==28.0.0
 gprof2dot==2024.6.6
 idna==3.8
+inflection==0.5.1
 ipython==8.23.0
 jedi==0.19.1
+jsonschema==4.23.0
+jsonschema-specifications==2023.12.1
 matplotlib-inline==0.1.6
 parso==0.8.4
 pexpect==4.9.0
@@ -31,8 +36,11 @@ pycodestyle==2.12.1
 Pygments==2.17.2
 PyJWT==2.9.0
 python-dateutil==2.9.0.post0
+PyYAML==6.0.2
 redis==5.0.8
+referencing==0.35.1
 requests==2.32.3
+rpds-py==0.20.0
 setuptools==72.1.0
 six==1.16.0
 sqlparse==0.4.4
@@ -41,6 +49,7 @@ toposort==1.10
 traitlets==5.14.2
 typing_extensions==4.11.0
 tzdata==2024.1
+uritemplate==4.1.1
 urllib3==2.2.2
 wcwidth==0.2.13
 wheel==0.43.0

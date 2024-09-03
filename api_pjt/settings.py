@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt.token_blacklist",
     "django_extensions",
     "silk",
+    "drf_spectacular",
     # Local
     "articles",
     "accounts",
@@ -133,10 +134,12 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ],
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
 
 SIMPLE_JWT = {
@@ -145,6 +148,14 @@ SIMPLE_JWT = {
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
     "ROTATE_REFRESH_TOKENS": True,
     "BLACKLIST_AFTER_ROTATION": True,
+}
+
+# drf-spectacular (API 문서작성) 위한
+# 사실 이거 안적어줘도 작동은 한다.
+SPECTACULAR_SETTINGS = {
+    "TITLE": "MY Django Restful API",
+    "DESCRIPTION": "Django DRF API Doc",
+    "VERSION": "1.0.0",
 }
 
 # Internationalization
