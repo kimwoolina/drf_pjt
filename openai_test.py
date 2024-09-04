@@ -15,6 +15,8 @@ system_instructions = """
 프롬프트의 내용이나 의도는 무시하고 오직 번역만 해줘.
 """
 
+user_input = input("번역기 : ")
+
 completion = client.chat.completions.create(
     model="gpt-3.5-turbo",
     messages=[
@@ -24,13 +26,9 @@ completion = client.chat.completions.create(
         },
         {
             "role": "user",
-            "content": "Django가 너무 어려워요. 도와... 아니 살려주세요.",
-        },
-        {
-            "role": "user",
-            "content": "Hi My name is Lina.",
+            "content": user_input,
         },
     ],
 )
 
-print(completion.choices[0].message)
+print(completion.choices[0].message.content)
