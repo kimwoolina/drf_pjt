@@ -22,7 +22,13 @@ OPEN_API_KEY = config.OPENAI_API_KEY
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+# 장고의 보안 기능.
+# 이 장고 프로젝트가 실행될 host를 적어줘야함.
+ALLOWED_HOSTS = [
+    "43.202.65.177",
+    "localhost",
+    "127.0.0.1",
+]
 
 
 # Application definition
