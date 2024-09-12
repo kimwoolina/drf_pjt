@@ -3,6 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import User
 from .validator import validate_user_data
+from .serializer import UserSerializer
 
 
 
@@ -31,13 +32,6 @@ class UserCreateView(APIView):
             email=email,
         )
         
+        serializer = UserSerializer(user)
         # JSON 형태
-        return Response(
-            {
-                "message": "User created successfully.",
-                "id" : user.pk,
-                "username" : user.username,
-                "nickname" : user.nickname,
-                "email" : user.email,
-            }
-        )
+        return Response(serializer.data)
