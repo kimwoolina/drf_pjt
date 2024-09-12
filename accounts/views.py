@@ -13,16 +13,18 @@ class UserCreateView(APIView):
         if rlt_message is not None:
             return Response({"message": rlt_message}, status=400)
         
-        # 비밀번호 자동 해싱처리 등 기능 제공
-        user = User.objects.create_user(
-            username=request.data.get('username'),
-            password=request.data.get('password'),
-            nickname=request.data.get('nickname'),
-            birth=request.data.get('birth'),
-            first_name=request.data.get('first_name'),
-            last_name=request.data.get('last_name'),
-            email=request.data.get('email'),
-        )
+        # user = User.objects.create_user(
+        #     username=request.data.get('username'),
+        #     password=request.data.get('password'),
+        #     nickname=request.data.get('nickname'),
+        #     birth=request.data.get('birth'),
+        #     first_name=request.data.get('first_name'),
+        #     last_name=request.data.get('last_name'),
+        #     email=request.data.get('email'),
+        # )
+        
+        # create_user: 비밀번호 자동 해싱처리 등 기능 제공
+        user = User.objects.create_user(**request.data)
         
         serializer = UserSerializer(user)
         # JSON 형태
