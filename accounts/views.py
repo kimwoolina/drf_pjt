@@ -3,9 +3,10 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import User
 from .validator import validate_user_data
-from .serializer import UserSerializer
+from .serializer import UserSerializer, UserProfileSerializer
 from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.permissions import IsAuthenticated
 
 
 class UserCreateView(APIView):
@@ -62,4 +63,15 @@ class UserLoginView(APIView):
             'access' : str(refresh.access_token),
             }
         )
+
+class UserProfileView(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request, username):
         
+        # 01. user 조회
+        user = User.objects.get(username=username)
+        
+        # 02. User 객체 직렬화 (JSON)
+        serializer = UserProfileSerializer(user)
+        
+        return Response(serializer.data)
