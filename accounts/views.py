@@ -6,10 +6,12 @@ from .validator import validate_user_data
 from .serializer import UserSerializer, UserProfileSerializer
 from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import AllowAny
 
 
 class UserCreateView(APIView):
+    permission_classes = [AllowAny]
+    
     def post(self, request):
         rlt_message = validate_user_data(request.data)
         if rlt_message is not None:
@@ -41,6 +43,8 @@ class UserCreateView(APIView):
     
     
 class UserLoginView(APIView):
+    permission_classes = [AllowAny]
+    
     def post(self, request):
         username = request.data.get('username')
         password = request.data.get('password')
@@ -65,7 +69,6 @@ class UserLoginView(APIView):
         )
 
 class UserProfileView(APIView):
-    permission_classes = [IsAuthenticated]
     def get(self, request, username):
         
         # 01. user 조회
