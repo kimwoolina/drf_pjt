@@ -175,6 +175,9 @@ USE_TZ = True
 STATIC_URL = "static/"
 STATIC_ROOT = BASE_DIR/"static"
 
+MEDIA_URL = "/media/" # url에 사용
+MEDIA_ROOT = BASE_DIR/"media" #실제 저장되는 디렉토리 (수정해주면 우리 로컬에서 생기는 폴더이름이 수정됨)
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
