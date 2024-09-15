@@ -4,9 +4,12 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.generics import ListAPIView
 from rest_framework.pagination import PageNumberPagination
+from django.db.models import Q
 
 from .models import Product, Products
 from .serializers import ProductSerializer, ProductsSerializer
+
+
 
 
 """
@@ -39,6 +42,11 @@ class ProductListAPIView(ListAPIView):
     serializer_class = ProductsSerializer
     
     def get_queryset(self):
+        search = self.request.query_params.get('search')
+        if search:
+            return Products.objects.filter(
+                Q(title__icontains = search) | Q(content__icontains = search)
+            )
         return Products.objects.all()
     
     
