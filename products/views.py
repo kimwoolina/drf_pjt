@@ -2,12 +2,11 @@ from django.core.cache import cache
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.generics import ListAPIView
+from rest_framework.pagination import PageNumberPagination
 
 from .models import Product, Products
 from .serializers import ProductSerializer, ProductsSerializer
-
-from rest_framework.views import APIView
-
 
 
 """
@@ -26,11 +25,22 @@ def product_list(request):
     return Response(json_response)
 """
 
-class ProductListView(APIView):
+
+class ProductListAPIView(ListAPIView):
     
     # 상품 등록은 로그인 상태 필요, 상품 목록 조회는 로그인 없이 가능하게
     permission_classes = [IsAuthenticatedOrReadOnly]
     # 클릭해서 코드 확인해보면, SAFE_METHODS('GET', 'HEAD', 'OPTIONS') == 데이터를 조작하지 않아 안전한 요청들은 인증 불필요하게.
+    
+    # 페이지 네이션
+    pagination_class = PageNumberPagination
+    # 이제 상품목록 호출할 때, param에서 page = 페이지번호 를 입력하여 페이지별로 호출하게 된다.
+    
+    serializer_class = ProductsSerializer
+    
+    def get_queryset(self):
+        return Products.objects.all()
+    
     
     def post(self, request):
         title = request.data.get('title')
@@ -47,7 +57,8 @@ class ProductListView(APIView):
         
         return Response(serializer.data)
     
-    def get(self, request):
-        products = Products.objects.all()
-        serializer = ProductsSerializer(products, many=True)
-        return Response(serializer.data)
+    # def get(self, request):
+    #     products = Products.objects.all()
+    #     serializer = ProductsSerializer(products, many=True)
+    #     return Response(serializer.data)
+    
