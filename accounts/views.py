@@ -104,3 +104,19 @@ class UserPasswordChangeView(APIView):
         request.user.save()
         
         return Response()
+    
+
+# 회원 정보 삭제
+class UserWithdrawalView(APIView):
+    
+    def delete(self, request):
+        password = request.data.get("password")
+        if not request.user.check_password(password):
+            return Response(
+                {"message" : "기존 비밀번호가 틀렸습니다."},
+                status=400,
+            )    
+        
+        request.user.is_active = False
+        request.user.delete()
+        return Response({'message': '회원 삭제 성공'})
