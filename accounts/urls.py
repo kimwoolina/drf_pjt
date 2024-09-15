@@ -10,7 +10,8 @@ from . import views
 urlpatterns = [
     path("", views.UserCreateView.as_view(), name="user_create"),
     path("login/", views.UserLoginView.as_view(), name="user_login"),
-    path("<str:username>/", views.UserProfileView.as_view(), name="user_profile"),
+    path("changepassword/", views.UserPasswordChangeView.as_view(), name="user_changepassword"),
     path("signin/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
+    path("<str:username>/", views.UserProfileView.as_view(), name="user_profile"),
     path("token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
 ]

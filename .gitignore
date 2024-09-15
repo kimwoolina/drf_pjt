@@ -385,7 +385,7 @@ $RECYCLE.BIN/
 db.sqlite3
 
 # Django
-# media
+media
 
 #SECRET_KEY
 secret.json

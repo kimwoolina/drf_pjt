@@ -78,3 +78,29 @@ class UserProfileView(APIView):
         serializer = UserProfileSerializer(user)
         
         return Response(serializer.data)
+    
+    
+# 로그아웃은 refresh token만 blacklist에 등록해주면 된다.
+# access token은 등록하면 안됨.
+# 유저가 api 콜을 할때마다 access token을 사용한다. 한 유저가 api를 몇천번을 콜하므로.
+# access token이 black list에 있는지 체크하려면 시스템에 부담이 될것이다.
+# 따라서 access token은 프론트엔드 쪽에서 지워줘야한다.
+
+
+# 비밀번호 변경
+class UserPasswordChangeView(APIView):
+    def post(self, request):
+        old_password = request.data.get('old_password')
+        new_password = request.data.get('new_password')
+        
+        if not request.user.check_password(old_password):
+            return Response(
+                {'message': '기존 비밀번호가 일치하지 않습니다.'}, 
+                status=400
+                )
+        
+        # 알아서 해싱해서 저장해줌. (장고 내장 기능)
+        request.user.set_password(new_password)
+        request.user.save()
+        
+        return Response()
