@@ -1,6 +1,7 @@
 from django.core.cache import cache
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 from .models import Product, Products
 from .serializers import ProductSerializer, ProductsSerializer
@@ -8,6 +9,8 @@ from .serializers import ProductSerializer, ProductsSerializer
 from rest_framework.views import APIView
 
 
+
+"""
 @api_view(["GET"])
 def product_list(request):
     cache_key = "product_list"
@@ -21,8 +24,14 @@ def product_list(request):
     
     json_response = cache.get(cache_key) # 캐시에 있을 경우 캐시에서 가져온다 -> 반정도로 실행시간 줄어든다!
     return Response(json_response)
+"""
 
 class ProductListView(APIView):
+    
+    # 상품 등록은 로그인 상태 필요, 상품 목록 조회는 로그인 없이 가능하게
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    # 클릭해서 코드 확인해보면, SAFE_METHODS('GET', 'HEAD', 'OPTIONS') == 데이터를 조작하지 않아 안전한 요청들은 인증 불필요하게.
+    
     def post(self, request):
         title = request.data.get('title')
         content = request.data.get('content')
@@ -36,4 +45,9 @@ class ProductListView(APIView):
         
         serializer = ProductsSerializer(product)
         
+        return Response(serializer.data)
+    
+    def get(self, request):
+        products = Products.objects.all()
+        serializer = ProductsSerializer(products, many=True)
         return Response(serializer.data)
