@@ -6,8 +6,8 @@ from rest_framework.generics import ListAPIView
 from rest_framework.pagination import PageNumberPagination
 from django.db.models import Q
 
-from .models import Product, Products
-from .serializers import ProductSerializer, ProductsSerializer
+from .models import Product, Products, Category
+from .serializers import ProductSerializer, ProductsSerializer, CategorySerializer
 
 
 
@@ -55,11 +55,18 @@ class ProductListAPIView(ListAPIView):
         content = request.data.get('content')
         # Postman에서 image필드는 json으로 보낼수가 없음. -> Body의 form-data사용하면 이미지도 올릴 수 있다!
         image = request.data.get('image')
+        category = request.data.get('category')
         
-        print(title, content, image)
+        # category =  Category.objects.get(id = category_id_text)
         
         # product = Product.objects.create(**request.data)와 같음
-        product = Products.objects.create(title=title, content=content, image=image)
+        product = Products.objects.create(
+            title=title, 
+            content=content, 
+            image=image, 
+            #category=category,
+            category_id=category
+        )
         
         serializer = ProductsSerializer(product)
         
@@ -69,4 +76,10 @@ class ProductListAPIView(ListAPIView):
     #     products = Products.objects.all()
     #     serializer = ProductsSerializer(products, many=True)
     #     return Response(serializer.data)
+    
+
+class CategoryListView(ListAPIView):
+    serializer_class = CategorySerializer
+    
+    queryset = Category.objects.all()
     
