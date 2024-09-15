@@ -19,4 +19,14 @@ class Products(models.Model):
     title = models.CharField(max_length=100)
     content = models.TextField()
     image = models.ImageField()
+    category = models.ForeignKey(
+        "Category", 
+        on_delete=models.CASCADE, 
+        related_name="products",
+        null=True,
+        blank=True,
+    )
+
+class Category(models.Model):
+    name = models.CharField(max_length=20, unique=True)
     
