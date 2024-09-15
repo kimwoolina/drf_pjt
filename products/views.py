@@ -2,8 +2,11 @@ from django.core.cache import cache
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from .models import Product
-from .serializers import ProductSerializer
+from .models import Product, Products
+from .serializers import ProductSerializer, ProductsSerializer
+
+from rest_framework.views import APIView
+
 
 @api_view(["GET"])
 def product_list(request):
@@ -18,3 +21,19 @@ def product_list(request):
     
     json_response = cache.get(cache_key) # 캐시에 있을 경우 캐시에서 가져온다 -> 반정도로 실행시간 줄어든다!
     return Response(json_response)
+
+class ProductListView(APIView):
+    def post(self, request):
+        title = request.data.get('title')
+        content = request.data.get('content')
+        # Postman에서 image필드는 json으로 보낼수가 없음. -> Body의 form-data사용하면 이미지도 올릴 수 있다!
+        image = request.data.get('image')
+        
+        print(title, content, image)
+        
+        # product = Product.objects.create(**request.data)와 같음
+        product = Products.objects.create(title=title, content=content, image=image)
+        
+        serializer = ProductsSerializer(product)
+        
+        return Response(serializer.data)

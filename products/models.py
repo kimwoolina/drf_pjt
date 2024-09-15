@@ -14,3 +14,9 @@ class Product(models.Model):
     
     def __str__(self):
         return self.name
+    
+class Products(models.Model):
+    title = models.CharField(max_length=100)
+    content = models.TextField()
+    image = models.ImageField()
+    
